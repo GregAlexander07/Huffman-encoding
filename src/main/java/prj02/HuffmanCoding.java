@@ -92,52 +92,117 @@ public class HuffmanCoding {
 
 	/**
 	 * TODO ADD DESCRIPTION OF WHAT THIS METHOD DOES HERE
+	 * Compute Symbol Frequency Distribution of each character inside input string
 	 *
-	 * @param TODO ADD PARAMETER AND DESCRIPTION
+	 * @param inputString TODO PARAMETER AND DESCRIPTION
 	 * @return TODO ADD RETURN AND DESCRIPTION
 	 */
 	public static Map<String, Integer> compute_fd(String inputString) {
 		/* TODO Compute Symbol Frequency Distribution of each character inside input string */
+		Map<String, Integer> fdMap = new HashTableSC<>(10, new SimpleHashFunction<>());
 
-		return null; //Dummy Return
+		//loop through data set
+		for (int i = 0; i < inputString.length(); i++) {
+
+			//current letter
+			String letter = String.valueOf(inputString.charAt(i));
+
+
+			if (!fdMap.containsKey(letter)) {
+				fdMap.put(letter, 1);
+
+			} else {
+				int oldValue = fdMap.get(letter);
+				fdMap.put(letter, oldValue + 1);
+
+			}
+		}
+		return fdMap;
+
+
 	}
 
 	/**
 	 * TODO ADD DESCRIPTION OF WHAT THIS METHOD DOES HERE
 	 *
-	 * @param TODO ADD PARAMETER AND DESCRIPTION
+	 * @param fD TODO ADD PARAMETER AND DESCRIPTION
 	 * @return TODO ADD RETURN AND DESCRIPTION
 	 */
 	public static BTNode<Integer, String> huffman_tree(Map<String, Integer> fD) {
 
 		/* TODO Construct Huffman Tree */
-		BTNode<Integer,String> rootNode;
 
-		return rootNode; //Dummy Return
+		SortedLinkedList<BTNode<Integer, String>> SL = new SortedLinkedList<BTNode<Integer, String>>();
+
+		// store FD in SL
+		for (String string : fD.getKeys()) {
+			BTNode<Integer, String> nta = new BTNode<>(fD.get(string), string);
+			SL.add(nta);
+		}
+
+		if (SL.size() == 1)
+			//if there was only one node, that would be the root of the tree
+			return SL.removeIndex(0);
+
+
+		//construct tree
+		while (SL.size() > 1) {
+			BTNode<Integer, String> node = new BTNode<>();
+			BTNode<Integer, String> left = SL.removeIndex(0);
+			BTNode<Integer, String> right = SL.removeIndex(0);
+			node.setLeftChild(left);
+			node.setRightChild(right);
+			left.setParent(node);
+			right.setParent(node);
+
+			//combine elements for parent node
+			node.setKey(left.getKey() + right.getKey());
+			node.setValue((left.getValue() + right.getValue()));
+
+
+			SL.add(node);
+		}
+
+		//remove the remaining node of the list (the root of the huffman_tree)
+		BTNode<Integer, String> huffmanRoot = SL.removeIndex(0);
+		return huffmanRoot;
 	}
 
 	/**
 	 * TODO ADD DESCRIPTION OF WHAT THIS METHOD DOES HERE
-	 *
-	 * @param ADD PARAMETER AND DESCRIPTION
-	 * @return ADD RETURN AND DESCRIPTION
-	 */
+	 * Receives the root of a Huffman tree and returns a mapping of every
+	 * symbol to its corresponding Huffman code.
+	 * @param huffmanRoot is the very first node of the tree
+	 * @return codeMap is a map containing
+	  */
 	public static Map<String, String> huffman_code(BTNode<Integer,String> huffmanRoot) {
 		/* TODO Construct Prefix Codes */
-		return null; //Dummy Return
+
+		Map<String, String> codeMap = new HashTableSC<>(2, new SimpleHashFunction<>());
+		String code = "";
+		huffman_codeAux(huffmanRoot, codeMap, code);
+
+		return codeMap;
+
 	}
 
 	/**
 	 * TODO ADD DESCRIPTION OF WHAT THIS METHOD DOES HERE
 	 *
-	 * @param TODO ADD PARAMETER AND DESCRIPTION
-	 * @param TODO ADD PARAMETER AND DESCRIPTION
+	 * @param encodingMap TODO ADD PARAMETER AND DESCRIPTION
+	 * @param inputString TODO ADD PARAMETER AND DESCRIPTION
 	 * @return TODO ADD RETURN AND DESCRIPTION
 	 */
 	public static String encode(Map<String, String> encodingMap, String inputString) {
 		/* TODO Encode String */
 
-		return ""; //Dummy Return
+		//string builder instead of regular string so that I am able to mutate it while adding to it
+		StringBuilder encodedMessage = new StringBuilder();
+		for (char c: inputString.toCharArray()){
+			encodedMessage.append(encodingMap.get(String.valueOf(c)));
+		}
+		//return resulting string
+		return encodedMessage.toString();
 	}
 
 	/**
@@ -243,15 +308,31 @@ public class HuffmanCoding {
 
 			String searched = output.substring(start, i);
 
-			int index = prefixCodes.firstIndex(searched);
+				int index = prefixCodes.firstIndex(searched);
 
-			if(index >= 0) { //Found it
-				result= result + symbols.get(index);
-				start = i;
+				if(index >= 0) { //Found it
+					result= result + symbols.get(index);
+					start = i;
+				}
 			}
+			return result;
 		}
-		return result;
-	}
 
+	public static void huffman_codeAux(BTNode<Integer, String> huffmanNode, Map<String, String> codeMap, String code) {
+
+
+		//if its a leaf add to code map
+		if(huffmanNode.getLeftChild() == null && huffmanNode.getRightChild() == null){
+			codeMap.put(huffmanNode.getValue(), code);
+		}
+
+		if(huffmanNode.getLeftChild() != null)
+			huffman_codeAux(huffmanNode.getLeftChild(), codeMap, code + "0");
+
+
+		if(huffmanNode.getRightChild() != null)
+			huffman_codeAux(huffmanNode.getRightChild(), codeMap, code + "1");
+
+	}
 
 }

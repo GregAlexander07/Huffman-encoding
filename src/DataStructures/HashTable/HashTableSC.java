@@ -188,21 +188,38 @@ public class HashTableSC<K, V> implements Map<K, V> {
 	 */
 	@SuppressWarnings("unchecked")
 	private void rehash() {
-		List<BucketNode<K,V>>[] oldMap = buckets;
-		List<BucketNode<K,V>>[] newMap = new LinkedList[size() * 2];
-		buckets = newMap;
-		for (int i = 0; i < buckets.length; i++) {
-			buckets[i] = new LinkedList<BucketNode<K,V>>();
-		}
-		for (List<BucketNode<K, V>> list : oldMap) {
-			for (BucketNode<K, V> old : list) {
-				/* Determine the bucket corresponding to this key */
-				int targetBucket = hashFunction.hashCode(old.getKey()) % buckets.length;
-				/* Within that bucket there is a linked list, since we're using Separate Chaining */
-				List<BucketNode<K, V>> L = buckets[targetBucket];
-				/* Finally, add the key/value to the linked list */
-				L.add(0, new BucketNode<K, V>(old.getKey(), old.getValue()));
+//		List<BucketNode<K,V>>[] oldMap = buckets;
+//		List<BucketNode<K,V>>[] newMap = new LinkedList[size() * 2];
+//		buckets = newMap;
+//		for (int i = 0; i < buckets.length; i++) {
+//			buckets[i] = new LinkedList<BucketNode<K,V>>();
+//		}
+//		for (List<BucketNode<K, V>> list : oldMap) {
+//			for (BucketNode<K, V> old : list) {
+//				/* Determine the bucket corresponding to this key */
+//				int targetBucket = hashFunction.hashCode(old.getKey()) % buckets.length;
+//				/* Within that bucket there is a linked list, since we're using Separate Chaining */
+//				List<BucketNode<K, V>> L = buckets[targetBucket];
+//				/* Finally, add the key/value to the linked list */
+//				L.add(0, new BucketNode<K, V>(old.getKey(), old.getValue()));
+//
+//			}
+//		}
 
+		List<BucketNode<K, V>>[] temp = this.buckets;
+
+		this.buckets = new LinkedList[temp.length * 2];
+
+		//initializing buckets
+		for (int i = 0; i < buckets.length ; i++)
+			this.buckets[i] = new LinkedList<BucketNode<K, V>>();
+
+
+
+		for (int i = 0; i < temp.length; i++) {
+			for (BucketNode<K,V> node: temp[i]) {
+				int target = hashFunction.hashCode(node.getKey())% buckets.length;
+				buckets[target].add(new BucketNode<>(node.getKey(), node.getValue()));
 			}
 		}
 
