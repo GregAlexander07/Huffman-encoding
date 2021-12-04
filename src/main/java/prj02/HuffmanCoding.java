@@ -23,7 +23,7 @@ import Tree.*;
  *
  * @author Fernando J. Bermudez Medina (Template)
  * @author A. ElSaid (Review)
- * @author ADD YOUR NAME HERE <ADD STUDENT ID HERE> (Implementation)
+ * @author Greg A. Viera Pérez <802168412> (Implementation)
  * @version 2.0
  * @since 10/16/2021
  */
@@ -91,14 +91,11 @@ public class HuffmanCoding {
 	}
 
 	/**
-	 * TODO ADD DESCRIPTION OF WHAT THIS METHOD DOES HERE
 	 * Compute Symbol Frequency Distribution of each character inside input string
-	 *
-	 * @param inputString TODO PARAMETER AND DESCRIPTION
-	 * @return TODO ADD RETURN AND DESCRIPTION
+	 * @param inputString - string to be considered to calculate each characters frequency distribution
+	 * @return fdMap - the frequency distribution map of every character in inputString
 	 */
 	public static Map<String, Integer> compute_fd(String inputString) {
-		/* TODO Compute Symbol Frequency Distribution of each character inside input string */
 		Map<String, Integer> fdMap = new HashTableSC<>(10, new SimpleHashFunction<>());
 
 		//loop through data set
@@ -123,14 +120,12 @@ public class HuffmanCoding {
 	}
 
 	/**
-	 * TODO ADD DESCRIPTION OF WHAT THIS METHOD DOES HERE
-	 *
-	 * @param fD TODO ADD PARAMETER AND DESCRIPTION
-	 * @return TODO ADD RETURN AND DESCRIPTION
+	 * Receives a Map with the frequency distribution and returns the root
+	 * node of the corresponding Huffman tree.
+	 * @param fD - he frequency distribution of the symbols
+	 * @return huffmanRoot - the root node of the tree
 	 */
 	public static BTNode<Integer, String> huffman_tree(Map<String, Integer> fD) {
-
-		/* TODO Construct Huffman Tree */
 
 		SortedLinkedList<BTNode<Integer, String>> SL = new SortedLinkedList<BTNode<Integer, String>>();
 
@@ -169,29 +164,27 @@ public class HuffmanCoding {
 	}
 
 	/**
-	 * TODO ADD DESCRIPTION OF WHAT THIS METHOD DOES HERE
 	 * Receives the root of a Huffman tree and returns a mapping of every
-	 * symbol to its corresponding Huffman code.
-	 * @param huffmanRoot is the very first node of the tree
-	 * @return codeMap is a map containing
+	 * symbol to its corresponding Huffman code. Construct Prefix Codes
+	 * @param huffmanRoot - the first/root node of the tree
+	 * @return codeMap - a map containing the symbols and the corresponding huffman code
 	  */
 	public static Map<String, String> huffman_code(BTNode<Integer,String> huffmanRoot) {
-		/* TODO Construct Prefix Codes */
 
 		Map<String, String> codeMap = new HashTableSC<>(2, new SimpleHashFunction<>());
-		String code = "";
+		String code = ""; //
+		//fill the code map
 		huffman_codeAux(huffmanRoot, codeMap, code);
-
 		return codeMap;
 
 	}
 
 	/**
-	 * TODO ADD DESCRIPTION OF WHAT THIS METHOD DOES HERE
-	 *
-	 * @param encodingMap TODO ADD PARAMETER AND DESCRIPTION
-	 * @param inputString TODO ADD PARAMETER AND DESCRIPTION
-	 * @return TODO ADD RETURN AND DESCRIPTION
+	 * Receives the Huffman code map and the input string and returns the encoded
+	 * string.
+	 * @param encodingMap - mapping each symbol and its huffman code
+	 * @param inputString - String to be encoded according to encodingMap
+	 * @return the resulting string composed by all the
 	 */
 	public static String encode(Map<String, String> encodingMap, String inputString) {
 		/* TODO Encode String */
@@ -199,6 +192,7 @@ public class HuffmanCoding {
 		//string builder instead of regular string so that I am able to mutate it while adding to it
 		StringBuilder encodedMessage = new StringBuilder();
 		for (char c: inputString.toCharArray()){
+
 			encodedMessage.append(encodingMap.get(String.valueOf(c)));
 		}
 		//return resulting string
@@ -318,18 +312,26 @@ public class HuffmanCoding {
 			return result;
 		}
 
+	/**
+	 * Create a mapping between every symbol and its corresponding Huffman code
+	 * depending on the position of the node in the tree
+	 * @param huffmanNode - the node to be evaluated
+	 * @param codeMap - stores the mapping of the symbols and their corresponding huffman code
+	 * @param code - holds the code string of each symbol
+	 */
 	public static void huffman_codeAux(BTNode<Integer, String> huffmanNode, Map<String, String> codeMap, String code) {
 
 
-		//if its a leaf add to code map
+		//if its a leaf add the string code to code map
 		if(huffmanNode.getLeftChild() == null && huffmanNode.getRightChild() == null){
 			codeMap.put(huffmanNode.getValue(), code);
 		}
 
+		//string to the left adds 0
 		if(huffmanNode.getLeftChild() != null)
 			huffman_codeAux(huffmanNode.getLeftChild(), codeMap, code + "0");
 
-
+		//string to the left adds 0
 		if(huffmanNode.getRightChild() != null)
 			huffman_codeAux(huffmanNode.getRightChild(), codeMap, code + "1");
 

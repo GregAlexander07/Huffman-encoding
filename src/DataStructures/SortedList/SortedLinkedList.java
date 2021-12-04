@@ -59,22 +59,28 @@ public class SortedLinkedList<E extends Comparable<? super E>> extends AbstractS
 		currentSize = 0;
 	}
 
+	/**
+	 * The add methods inserts elements to the list in a ascending order
+	 * @param e elements to add to the list
+	 */
 	@Override
 	public void add(E e) {
-		/* TODO ADD CODE HERE */
 		Node<E> newNode = new Node<>(e);
 
 		if (this.isEmpty()) {
 			this.head = newNode;
 		}
+
 		/* Special case: Be careful when the new value is the smallest */
-
-
 		else if (e.compareTo(this.head.getValue()) < 0) {
 			newNode.setNext(this.head);
 			this.head = newNode;
+
+			//if the element does not enter any of the previous ifs
+			//traverse the list to find where to insert the node
 		} else {
 			Node<E> curNode = head;
+			//determines if the element has been added or not
 			boolean in = false;
 
 			while (curNode.getNext() != null) {
@@ -90,26 +96,39 @@ public class SortedLinkedList<E extends Comparable<? super E>> extends AbstractS
 					curNode = curNode.getNext();
 
 			}
+			//if the whole list was traversed and the elements is not in
+			//then the new node is added at the end of the list
 			if (!in)
 				curNode.setNext(newNode);
 
 		}
 		this.currentSize++;
 	}
+
+
+	/**
+	 * Removes a specific element in the list
+	 * @param e elements to be removed
+	 * @return true if the element was removed or false if it was not
+	 */
 	@Override
 	public boolean remove(E e) {
-		/* TODO ADD CODE HERE */
 		/* Special case: Be careful when the value is found at the head node */
 		if(isEmpty())
 			return false;
+		//first index tells the first occurrence of element to remove
+		//if its null, element was not in the list
 
 		return removeIndex(firstIndex(e)) != null;
 	}
 
+	/**
+	 * Given an index, removed the element at said index
+	 * @param index of the element to remove
+	 * @return value of element that removed
+	 */
 	@Override
 	public E removeIndex(int index) {
-		/* TODO ADD CODE HERE */
-		/* Special case: Be careful when index = 0 */
 		if (index < 0 || index > size()) throw new IndexOutOfBoundsException("add: invalid index =" + index);
 
 
@@ -141,36 +160,44 @@ public class SortedLinkedList<E extends Comparable<? super E>> extends AbstractS
 		return result;
 	}
 
+	/**
+	 * Provides the index of an element in the list
+	 * @param e is the target element
+	 * @return index or place in the list of the target element
+	 */
 	@Override
 	public int firstIndex(E e) {
-		/* TODO ADD CODE HERE */
-
-		int count = 0;
-		for (Node<E> temp = this.head; temp != null; temp = temp.getNext(), ++count) {
+		int index = 0;
+		//move until reach index
+		for (Node<E> temp = this.head; temp != null; temp = temp.getNext(), ++index) {
 			if (temp.getValue().equals(e)) {
-				return count;
+				return index;
 			}
 		}
-
 		return -1;
-
 	}
 
+	/**
+	 * Provides an element in the list at a specific position
+	 * @param index  to be traversed to
+	 * @return value of the element at index
+	 */
 	@Override
 	public E get(int index) {
-		/* TODO ADD CODE HERE */
 		if (index < 0 || index > size()) throw new IndexOutOfBoundsException("add: invalid index =" + index);
 
 		Node<E> curr = head;
 		for (int i = 0; i < index; i++) {
 			curr = curr.getNext();
 		}
-
 		return curr.getValue();
 	}
 
 
-
+	/**
+	 * Returns an Array version of the LinkedList contents
+	 * @return theArray version of the class LinkedList
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public E[] toArray() {
