@@ -3,6 +3,7 @@ package prj02;
 import static org.junit.Assert.*;
 
 
+
 import java.text.DecimalFormat;
 
 import org.junit.Before;
@@ -12,7 +13,7 @@ import HashTable.*;
 import SortedList.*;
 import Tree.*;
 
-public class P2Test1 {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    public class P2Test1 {
 
 	@SuppressWarnings("unchecked")
 	BTNode<Integer, String>[] freq = new BTNode[5];

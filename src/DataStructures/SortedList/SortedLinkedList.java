@@ -68,31 +68,34 @@ public class SortedLinkedList<E extends Comparable<? super E>> extends AbstractS
 			this.head = newNode;
 		}
 		/* Special case: Be careful when the new value is the smallest */
-		else if (e.compareTo(this.head.getValue()) <= 0) {
+
+
+		else if (e.compareTo(this.head.getValue()) < 0) {
 			newNode.setNext(this.head);
 			this.head = newNode;
-		}
-		Node<E> curNode = head;
-		boolean in = false;
+		} else {
+			Node<E> curNode = head;
+			boolean in = false;
 
-		while (curNode.getNext() != null) {
-			if (e.compareTo(curNode.getNext().getValue()) < 0) {
-				//insert between current and next
-				newNode.setNext(curNode.getNext());
-				curNode.setNext(newNode);
-				curNode = newNode;
-				in = true;
-				break;
+			while (curNode.getNext() != null) {
+				if (e.compareTo(curNode.getNext().getValue()) < 0) {
+					//insert between current and next
+					newNode.setNext(curNode.getNext());
+					curNode.setNext(newNode);
+					curNode = newNode;
+					in = true;
+					break;
 
-			} else
-				curNode = curNode.getNext();
+				} else
+					curNode = curNode.getNext();
 
+			}
 			if (!in)
 				curNode.setNext(newNode);
+
 		}
 		this.currentSize++;
 	}
-
 	@Override
 	public boolean remove(E e) {
 		/* TODO ADD CODE HERE */
